@@ -17,6 +17,9 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     private List<Movie> movies;
@@ -29,17 +32,18 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
 
-        private final TextView titleTextView;
-        private final TextView genresTextView;
-        private final TextView releaseDateTextView;
-        private final ImageView posterImageView;
+        @BindView(R.id.titleTextView)
+        TextView titleTextView;
+        @BindView(R.id.genresTextView)
+        TextView genresTextView;
+        @BindView(R.id.releaseDateTextView)
+        TextView releaseDateTextView;
+        @BindView(R.id.posterImageView)
+        ImageView posterImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
-            genresTextView = itemView.findViewById(R.id.genresTextView);
-            releaseDateTextView = itemView.findViewById(R.id.releaseDateTextView);
-            posterImageView = itemView.findViewById(R.id.posterImageView);
+            ButterKnife.bind(this, itemView);
         }
 
         public void bind(Movie movie) {
