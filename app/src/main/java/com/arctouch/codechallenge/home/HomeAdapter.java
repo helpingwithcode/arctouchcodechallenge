@@ -15,18 +15,16 @@ import com.arctouch.codechallenge.util.MovieImageUrlBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
-    private List<Movie> movies;
-
-    public HomeAdapter(List<Movie> movies) {
-        this.movies = movies;
-    }
+    private List<Movie> movies = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -76,5 +74,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(movies.get(position));
+    }
+
+    public void addResultsToList(List<Movie> newMovies){
+        Timber.e("movies sizes before: %s", movies.size());
+        for(Movie movie : newMovies){
+            movies.add(movie);
+            notifyItemInserted(movies.size() - 1);
+        }
+        Timber.e("movies sizes after: %s", movies.size());
     }
 }

@@ -3,17 +3,29 @@ package com.arctouch.codechallenge.splash;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.api.TmdbApi;
-import com.arctouch.codechallenge.base.BaseActivity;
 import com.arctouch.codechallenge.data.Cache;
 import com.arctouch.codechallenge.home.HomeActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.moshi.MoshiConverterFactory;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends AppCompatActivity {
+
+    TmdbApi api = new Retrofit.Builder()
+            .baseUrl(TmdbApi.URL)
+                .client(new OkHttpClient.Builder().build())
+            .addConverterFactory(MoshiConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+                .create(TmdbApi.class);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
