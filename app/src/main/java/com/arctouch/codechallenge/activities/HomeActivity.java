@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.home;
+package com.arctouch.codechallenge.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,28 +10,21 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.arctouch.codechallenge.R;
-import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.application.MyApplication;
-import com.arctouch.codechallenge.data.Cache;
-import com.arctouch.codechallenge.model.Genre;
+import com.arctouch.codechallenge.adapter.HomeAdapter;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.presenters.HomeActivityPresenter;
 import com.arctouch.codechallenge.util.RecyclerViewPaginationListener;
 import com.arctouch.codechallenge.views.HomeActivityView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.moshi.MoshiConverterFactory;
 
-public class HomeActivity extends AppCompatActivity implements HomeActivityView {
+public class HomeActivity extends AppCompatActivity implements HomeActivityView, HomeAdapter.HomeAdapterItemOnClick {
 
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
@@ -58,7 +51,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
     }
 
     private void setRecyclerViewPagination() {
-        moviesAdapter = new HomeAdapter();
+        moviesAdapter = new HomeAdapter(this);
         recyclerView.setAdapter(moviesAdapter);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -71,9 +64,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
             }
 
             @Override
-            public boolean isLoading() {
-                return isLoading;
-            }
+            public boolean isLoading() { return isLoading; }
         });
     }
 
@@ -89,5 +80,10 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
         isLoading = false;
         currentPage--;
         Toast.makeText(this, "There was a problem getting the movies, try again later", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void movieSelected(int movieId) {
+
     }
 }

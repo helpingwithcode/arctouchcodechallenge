@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.home;
+package com.arctouch.codechallenge.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -25,10 +25,21 @@ import timber.log.Timber;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     private List<Movie> movies = new ArrayList<>();
+    HomeAdapterItemOnClick adapterItemOnClick;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public HomeAdapter(HomeAdapterItemOnClick adapterItemOnClick) {
+        this.adapterItemOnClick = adapterItemOnClick;
+    }
+
+    public interface HomeAdapterItemOnClick {
+        void movieSelected(int movieId);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
+        private int movieId;
+        private Movie thisMovie;//TODO remove
 
         @BindView(R.id.titleTextView)
         TextView titleTextView;
@@ -42,20 +53,37 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Movie movie) {
+            setMovieId(movie.id);
+            setMovie(movie);
             titleTextView.setText(movie.title);
             genresTextView.setText(TextUtils.join(", ", movie.genres));
             releaseDateTextView.setText(movie.releaseDate);
-
             String posterPath = movie.posterPath;
-            if (TextUtils.isEmpty(posterPath) == false) {
+            if (!TextUtils.isEmpty(posterPath)) {
                 Glide.with(itemView)
                         .load(movieImageUrlBuilder.buildPosterUrl(posterPath))
                         .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
                         .into(posterImageView);
             }
+        }
+
+        private void setMovie(Movie movie) {
+            this.thisMovie = movie;
+        }
+
+        @Override
+        public void onClick(View view) {
+            adapterItemOnClick.movieSelected(this.movieId);
+            Timber.e("movie id clicked %s", this.movieId);
+            Timber.e("movie\n%s", this.thisMovie);
+        }
+
+        private void setMovieId(int id){
+            this.movieId = id;
         }
     }
 

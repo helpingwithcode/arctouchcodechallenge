@@ -1,10 +1,7 @@
 package com.arctouch.codechallenge.presenters;
 
-import android.content.Intent;
-
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.data.Cache;
-import com.arctouch.codechallenge.home.HomeActivity;
 import com.arctouch.codechallenge.model.Genre;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.views.HomeActivityView;

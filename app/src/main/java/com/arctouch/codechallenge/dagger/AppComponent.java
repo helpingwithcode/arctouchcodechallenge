@@ -1,7 +1,7 @@
 package com.arctouch.codechallenge.dagger;
 
 
-import com.arctouch.codechallenge.home.HomeActivity;
+import com.arctouch.codechallenge.activities.HomeActivity;
 
 import javax.inject.Singleton;
 
