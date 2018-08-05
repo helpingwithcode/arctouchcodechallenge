@@ -1,10 +1,14 @@
 package com.arctouch.codechallenge.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.squareup.moshi.Json;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Parcelable{
     public int id;
     public String title;
     public String overview;
@@ -65,4 +69,44 @@ public class Movie {
                 ", releaseDate='" + releaseDate + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int i) {
+        out.writeInt(id);
+        out.writeString(title);
+        out.writeString(overview);
+        out.writeList(genres);
+        out.writeList(genreIds);
+        out.writeString(posterPath);
+        out.writeString(backdropPath);
+        out.writeString(releaseDate);
+    }
+
+    private Movie(Parcel in) {
+        genres = new ArrayList<>();
+        genreIds = new ArrayList<>();
+        id = in.readInt();
+        title = in.readString();
+        overview = in.readString();
+        in.readList(genres, getClass().getClassLoader());
+        in.readList(genreIds, null);
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        releaseDate = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

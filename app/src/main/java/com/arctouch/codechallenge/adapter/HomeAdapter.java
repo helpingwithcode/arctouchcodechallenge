@@ -32,7 +32,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     }
 
     public interface HomeAdapterItemOnClick {
-        void movieSelected(int movieId);
+        void movieSelected(Movie mMovie);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -77,7 +77,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         @Override
         public void onClick(View view) {
-            adapterItemOnClick.movieSelected(this.movieId);
+            adapterItemOnClick.movieSelected(this.thisMovie);
             Timber.e("movie id clicked %s", this.movieId);
             Timber.e("movie\n%s", this.thisMovie);
         }

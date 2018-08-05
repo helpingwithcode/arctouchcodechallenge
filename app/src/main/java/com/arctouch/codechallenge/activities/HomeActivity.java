@@ -1,5 +1,6 @@
 package com.arctouch.codechallenge.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -83,7 +84,9 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView,
     }
 
     @Override
-    public void movieSelected(int movieId) {
-
+    public void movieSelected(Movie mMovie) {
+        Intent intent = new Intent(this, MovieDetailsActivity.class);
+        intent.putExtra("movie", mMovie);
+        startActivity(intent);
     }
 }
