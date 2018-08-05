@@ -41,7 +41,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
     @Inject
     HomeActivityPresenter presenter;
 
-    private LinearLayoutManager linearLayoutManager;
+    LinearLayoutManager linearLayoutManager;
     private boolean isLoading = false;
     private int currentPage = 1;
     private HomeAdapter moviesAdapter;
@@ -54,7 +54,7 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView 
         ButterKnife.bind(this);
         setRecyclerViewPagination();
         presenter.setView(this);
-        presenter.getUpcomingMovies(currentPage);
+        presenter.getFirstInformationLoad();
     }
 
     private void setRecyclerViewPagination() {

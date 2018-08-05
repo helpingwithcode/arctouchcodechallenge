@@ -1,7 +1,10 @@
 package com.arctouch.codechallenge.presenters;
 
+import android.content.Intent;
+
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.data.Cache;
+import com.arctouch.codechallenge.home.HomeActivity;
 import com.arctouch.codechallenge.model.Genre;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.views.HomeActivityView;
@@ -16,6 +19,7 @@ public class HomeActivityPresenter {
 
     TmdbApi api;
     HomeActivityView view;
+    private int FIRST_PAGE = 1;
 
     public HomeActivityPresenter(TmdbApi api){
         this.api = api;
@@ -46,5 +50,21 @@ public class HomeActivityPresenter {
                     if(response.results.isEmpty()) view.showError();
                     else view.showResults(response.results);
                 });
+    }
+
+    public void loadGenresInformation(){
+        api.genres(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    Timber.e("response %s", response.genres);
+                    Cache.setGenres(response.genres);
+//                    getUpcomingMovies(FIRST_PAGE);
+                });
+    }
+
+    public void getFirstInformationLoad() {
+        if(Cache.getGenres().isEmpty()) loadGenresInformation();
+        getUpcomingMovies(FIRST_PAGE);
     }
 }
