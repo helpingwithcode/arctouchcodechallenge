@@ -2,6 +2,7 @@ package com.arctouch.codechallenge.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,16 +15,19 @@ import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.application.MyApplication;
 import com.arctouch.codechallenge.adapter.HomeAdapter;
 import com.arctouch.codechallenge.model.Movie;
+import com.arctouch.codechallenge.model.UpcomingMoviesResponse;
 import com.arctouch.codechallenge.presenters.HomeActivityPresenter;
 import com.arctouch.codechallenge.util.RecyclerViewPaginationListener;
 import com.arctouch.codechallenge.views.HomeActivityView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class HomeActivity extends AppCompatActivity implements HomeActivityView, HomeAdapter.HomeAdapterItemOnClick {
 
@@ -39,6 +43,10 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView,
     private boolean isLoading = false;
     private int currentPage = 1;
     private HomeAdapter moviesAdapter;
+    public final static String MOVIE_INTENT_KEY = "movie";
+    public final static String MOVIE_INSTANCE_KEY = "movies";
+    public final static String CURRENT_PAGE = "current_page";
+    private UpcomingMoviesResponse mMoviesList = new UpcomingMoviesResponse();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +56,29 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView,
         ButterKnife.bind(this);
         setRecyclerViewPagination();
         presenter.setView(this);
-        presenter.getFirstInformationLoad();
+        if(savedInstanceState == null) {
+            mMoviesList.results = new ArrayList<>();
+            presenter.getFirstInformationLoad();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(MOVIE_INSTANCE_KEY, mMoviesList);
+        outState.putInt(CURRENT_PAGE, currentPage);
+        Timber.e("onSaveInstanceState");
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Timber.e("onRestoreInstanceState");
+        if(savedInstanceState == null) return;
+        mMoviesList = savedInstanceState.getParcelable(MOVIE_INSTANCE_KEY);
+        currentPage = savedInstanceState.getInt(CURRENT_PAGE);
+        Timber.e("passing savedInstanceState to showResults");
+        showResults(mMoviesList);
     }
 
     private void setRecyclerViewPagination() {
@@ -70,9 +100,9 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView,
     }
 
     @Override
-    public void showResults(List<Movie> movies) {
+    public void showResults(UpcomingMoviesResponse upcomingMoviesResponse) {
         isLoading = false;
-        moviesAdapter.addResultsToList(movies);
+        moviesAdapter.addResultsToList(upcomingMoviesResponse.results);
         progressBar.setVisibility(View.GONE);
     }
 
@@ -80,13 +110,18 @@ public class HomeActivity extends AppCompatActivity implements HomeActivityView,
     public void showError() {
         isLoading = false;
         currentPage--;
-        Toast.makeText(this, "There was a problem getting the movies, try again later", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.home_activity_no_more_results), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void saveResults(UpcomingMoviesResponse response) {
+        mMoviesList.results.addAll(response.results);
     }
 
     @Override
     public void movieSelected(Movie mMovie) {
         Intent intent = new Intent(this, MovieDetailsActivity.class);
-        intent.putExtra("movie", mMovie);
+        intent.putExtra(MOVIE_INTENT_KEY, mMovie);
         startActivity(intent);
     }
 }

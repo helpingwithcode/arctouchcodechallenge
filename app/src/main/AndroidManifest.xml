@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MovieDetailsActivity"></activity>
+        <activity android:name=".activities.MovieDetailsActivity"
+            android:label="@string/detail_activty"
+            android:parentActivityName=".activities.HomeActivity"
+            android:launchMode="singleTop"/>
     </application>
 
 </manifest>

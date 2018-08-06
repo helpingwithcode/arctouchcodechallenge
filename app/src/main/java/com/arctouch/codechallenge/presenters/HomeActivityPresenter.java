@@ -32,10 +32,6 @@ public class HomeActivityPresenter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    Timber.e("Response results\n%s", response.results);
-                    Timber.e("Response page\n%s", response.page);
-                    Timber.e("Response totalResults\n%s", response.totalResults);
-                    Timber.e("Response totalPages\n%s", response.totalPages);
                     for (Movie movie : response.results) {
                         movie.genres = new ArrayList<>();
                         for (Genre genre : Cache.getGenres()) {
@@ -45,7 +41,10 @@ public class HomeActivityPresenter {
                         }
                     }
                     if(response.results.isEmpty()) view.showError();
-                    else view.showResults(response.results);
+                    else {
+                        view.showResults(response);
+                        view.saveResults(response);
+                    }
                 });
     }
 

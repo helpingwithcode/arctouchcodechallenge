@@ -1,9 +1,65 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MovieDetailPoster">
+        <item name="android:layout_width">@dimen/movie_poster_width</item>
+        <item name="android:layout_height">@dimen/movie_poster_height</item>
+        <item name="android:padding">@dimen/half_spacing</item>
+    </style>
+
+    <style name="MovieDetailInfo">
+        <item name="android:layout_marginLeft">@dimen/spacing</item>
+        <item name="android:layout_marginStart" tools:ignore="NewApi">@dimen/spacing</item>
+    </style>
+
+    <style name="MovieDetailRatings" parent="MovieDetailInfo">
+        <item name="android:layout_marginTop">@dimen/half_spacing</item>
+    </style>
+
+    <style name="MovieDetailReleaseDate" parent="MovieDetailInfo">
+        <item name="android:layout_marginTop">@dimen/half_spacing</item>
+    </style>
+
+    <style name="MovieDetailTitle">
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-condensed</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="MovieDetailPlot">
+        <item name="android:layout_margin">@dimen/half_spacing</item>
+        <!--<item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>-->
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="MovieDetailsHolder">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/half_spacing</item>
+        <item name="android:layout_marginRight">@dimen/half_spacing</item>
+    </style>
+
+    <style name="CardStyle">
+        <item name="android:layout_margin">@dimen/half_spacing</item>
+    </style>
+
+    <style name="RecyclerViewTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingBottom">@dimen/half_spacing</item>
+        <item name="android:paddingLeft">@dimen/half_spacing</item>
+        <item name="android:paddingRight">@dimen/half_spacing</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily" tools:ignore="NewApi">sans-serif-condensed</item>
     </style>
 
 </resources>
