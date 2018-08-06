@@ -2,6 +2,7 @@ package com.arctouch.codechallenge.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,6 +75,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
 
     @Override
     public void setGenres(String genres) {
-        genresTv.setText(genres);
+        //TODO area of improvement >
+        //TODO genres from QueryResults aren't showing, there's someting missing on the parsing from the API
+        if(genres.isEmpty()) genresTv.setVisibility(View.GONE);
+        else genresTv.setText(genres);
     }
 }

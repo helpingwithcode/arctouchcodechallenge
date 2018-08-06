@@ -18,13 +18,6 @@ public class TmdbApiModule {
         return provideRetrofit(TmdbApi.URL).create(TmdbApi.class);
     }
 
-//    @Provides
-//    public OkHttpClient provideClient(){
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//        return new OkHttpClient.Builder().addInterceptor(interceptor).build();
-//    }
-
     @Provides
     public Retrofit provideRetrofit(String baseURL){
         return new Retrofit.Builder()

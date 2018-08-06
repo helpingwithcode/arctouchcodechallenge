@@ -8,20 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.model.Movie;
-import com.arctouch.codechallenge.model.UpcomingMoviesResponse;
 import com.arctouch.codechallenge.util.MovieImageUrlBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
@@ -32,60 +27,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         this.adapterItemOnClick = adapterItemOnClick;
     }
 
-    public interface HomeAdapterItemOnClick {
-        void movieSelected(Movie mMovie);
+    public void addQueryResults(List<Movie> results) {
+        movies = new ArrayList<>();
+        for(Movie movie : results) movies.add(movie);
+        notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public void reset() {
+        movies = new ArrayList<>();
+        notifyDataSetChanged();
+    }
 
-        private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
-        private int movieId;
-        private Movie thisMovie;//TODO remove
-
-        @BindView(R.id.titleTextView)
-        TextView titleTextView;
-        @BindView(R.id.genresTextView)
-        TextView genresTextView;
-        @BindView(R.id.releaseDateTextView)
-        TextView releaseDateTextView;
-        @BindView(R.id.posterImageView)
-        ImageView posterImageView;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
-        }
-
-        public void bind(Movie movie) {
-            setMovieId(movie.id);
-            setMovie(movie);
-            titleTextView.setText(movie.title);
-            genresTextView.setText(TextUtils.join(", ", movie.genres));
-            releaseDateTextView.setText(movie.releaseDate);
-            String posterPath = movie.posterPath;
-            if (!TextUtils.isEmpty(posterPath)) {
-                Glide.with(itemView)
-                        .load(movieImageUrlBuilder.buildPosterUrl(posterPath))
-                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
-                        .into(posterImageView);
-            }
-        }
-
-        private void setMovie(Movie movie) {
-            this.thisMovie = movie;
-        }
-
-        @Override
-        public void onClick(View view) {
-            adapterItemOnClick.movieSelected(this.thisMovie);
-            Timber.e("movie id clicked %s", this.movieId);
-            Timber.e("movie\n%s", this.thisMovie);
-        }
-
-        private void setMovieId(int id){
-            this.movieId = id;
-        }
+    public interface HomeAdapterItemOnClick {
+        void movieSelected(Movie mMovie);
     }
 
     @NonNull
@@ -106,11 +60,53 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     }
 
     public void addResultsToList(List<Movie> newMovies){
-        Timber.e("movies sizes before: %s", movies.size());
         for(Movie movie : newMovies){
             movies.add(movie);
             notifyItemInserted(movies.size() - 1);
         }
-        Timber.e("movies sizes after: %s", movies.size());
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
+        private Movie thisMovie;
+
+        @BindView(R.id.titleTextView)
+        TextView titleTextView;
+        @BindView(R.id.genresTextView)
+        TextView genresTextView;
+        @BindView(R.id.releaseDateTextView)
+        TextView releaseDateTextView;
+        @BindView(R.id.posterImageView)
+        ImageView posterImageView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(Movie movie) {
+            setMovie(movie);
+            titleTextView.setText(movie.title);
+            if(movie.genres != null) genresTextView.setText(TextUtils.join(", ", movie.genres));
+            releaseDateTextView.setText(movie.releaseDate);
+            String posterPath = movie.posterPath;
+            if (!TextUtils.isEmpty(posterPath)) {
+                Glide.with(itemView)
+                        .load(movieImageUrlBuilder.buildPosterUrl(posterPath))
+                        .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
+                        .into(posterImageView);
+            }
+        }
+
+        private void setMovie(Movie movie) {
+            this.thisMovie = movie;
+        }
+
+        @Override
+        public void onClick(View view) {
+            adapterItemOnClick.movieSelected(this.thisMovie);
+        }
     }
 }

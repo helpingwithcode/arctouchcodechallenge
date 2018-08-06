@@ -1,5 +1,7 @@
 package com.arctouch.codechallenge.presenters;
 
+import android.os.Bundle;
+
 import com.arctouch.codechallenge.api.TmdbApi;
 import com.arctouch.codechallenge.data.Cache;
 import com.arctouch.codechallenge.model.Genre;
@@ -10,24 +12,23 @@ import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class HomeActivityPresenter {
 
     TmdbApi api;
     HomeActivityView view;
-    private int FIRST_PAGE = 1;
+    int FIRST_PAGE = 1;
 
-    public HomeActivityPresenter(TmdbApi api){
+    public HomeActivityPresenter(TmdbApi api) {
         this.api = api;
     }
 
-    public void setView(HomeActivityView view){
+    public void setView(HomeActivityView view) {
         this.view = view;
     }
 
     public void getUpcomingMovies(int page) {
-        Timber.e("getUpcomingMovies(page:%s)", page);
+        view.loadingStatus(true);
         api.upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, page, TmdbApi.DEFAULT_REGION)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -40,7 +41,7 @@ public class HomeActivityPresenter {
                             }
                         }
                     }
-                    if(response.results.isEmpty()) view.showError();
+                    if (response.results.isEmpty()) view.showError();
                     else {
                         view.showResults(response);
                         view.saveResults(response);
@@ -48,19 +49,40 @@ public class HomeActivityPresenter {
                 });
     }
 
-    public void loadGenresInformation(){
+    public void loadGenresInformation() {
         api.genres(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    Timber.e("response %s", response.genres);
                     Cache.setGenres(response.genres);
-//                    getUpcomingMovies(FIRST_PAGE);
                 });
     }
 
     public void getFirstInformationLoad() {
-        if(Cache.getGenres().isEmpty()) loadGenresInformation();
+        if (Cache.getGenres().isEmpty()) loadGenresInformation();
         getUpcomingMovies(FIRST_PAGE);
+    }
+
+    public void queryMovie(String query) {
+        view.loadingStatus(true);
+        api.queryMovies(TmdbApi.API_KEY, query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(movieSearchResponse -> {
+                    if (movieSearchResponse.getResults().isEmpty()) {
+                        view.showQueryError();
+                        view.resetResultView();
+                    }
+                    else {
+                        view.showQueryResults(movieSearchResponse);
+                        view.saveQueryResults(movieSearchResponse);
+                    }
+                });
+    }
+
+    public void checkSavedInstanceState(Bundle savedInstanceState) {
+        if(savedInstanceState != null) return;
+            view.resetMovieList();
+            getFirstInformationLoad();
     }
 }

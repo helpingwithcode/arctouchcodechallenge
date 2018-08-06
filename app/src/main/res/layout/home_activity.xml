@@ -5,8 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <SearchView
+        android:id="@+id/sv_query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/half_spacing"
+        android:layout_marginRight="@dimen/half_spacing"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:layout_below="@id/sv_query"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

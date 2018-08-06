@@ -2,6 +2,7 @@ package com.arctouch.codechallenge.api;
 
 import com.arctouch.codechallenge.model.GenreResponse;
 import com.arctouch.codechallenge.model.Movie;
+import com.arctouch.codechallenge.model.MovieSearchResponse;
 import com.arctouch.codechallenge.model.UpcomingMoviesResponse;
 
 import io.reactivex.Observable;
@@ -15,7 +16,7 @@ public interface TmdbApi {
     String API_KEY = "1f54bd990f1cdfb230adb312546d765d";
 //    String DEFAULT_LANGUAGE = "pt-BR";
     String DEFAULT_LANGUAGE = "en-US";
-//    String DEFAULT_REGION = "BR";
+//    String DEFAULT_REGION = "BR"; Removed the DEFAULT_REGION value so that the infinite scroll can be used
 //    String DEFAULT_REGION = "US";
     String DEFAULT_REGION = "";
 
@@ -38,5 +39,11 @@ public interface TmdbApi {
             @Path("id") Long id,
             @Query("api_key") String apiKey,
             @Query("language") String language
+    );
+
+    @GET("search/movie")
+    Observable<MovieSearchResponse> queryMovies(
+            @Query("api_key") String apiKey,
+            @Query("query") String query
     );
 }

@@ -7,7 +7,7 @@ import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.util.MovieImageUrlBuilder;
 import com.arctouch.codechallenge.views.MovieDetailsActivityView;
 import java.util.List;
-import static com.arctouch.codechallenge.activities.HomeActivity.MOVIE_INTENT_KEY;
+import static com.arctouch.codechallenge.activities.HomeActivity.MOVIE_KEY;
 
 public class MovieDetailsActivityPresenter {
 
@@ -23,7 +23,7 @@ public class MovieDetailsActivityPresenter {
 
     public void setMovie(Intent intent){
         try{
-            mMovie = intent.getExtras().getParcelable(MOVIE_INTENT_KEY);
+            mMovie = intent.getExtras().getParcelable(MOVIE_KEY);
             getInfo();
         }
         catch (Exception e){
