@@ -3,8 +3,6 @@ package com.arctouch.codechallenge.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 public class Genre implements Parcelable{
 
     public int id;

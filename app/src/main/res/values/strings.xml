@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Code Challenge</string>
-    <string name="movie_and_genres">%s - %s</string>
     <string name="movie_title_default">Movie title</string>
     <string name="movie_genres_default">Genres</string>
     <string name="movie_release_default">Release</string>
     <string name="text_description">Movie description</string>
-    <string name="detail_activty">Movie Details</string>
+    <string name="detail_activity">Movie Details</string>
     <string name="movie_details_error">There was a problem loading the selected movie</string>
     <string name="home_activity_no_more_results">There are no more results to be shown</string>
     <string name="home_activity_no_results">Couldn\'t find movie with provided name</string>
+    <string name="ct_backdrop">Backdrop image</string>
 </resources>

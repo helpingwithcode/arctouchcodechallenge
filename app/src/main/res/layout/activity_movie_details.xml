@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/sv_holder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MovieDetailsActivity">
@@ -11,7 +10,8 @@
         android:id="@+id/iv_backdrop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/ct_backdrop" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -46,8 +46,7 @@
                         style="@style/MovieDetailsHolder"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_toEndOf="@id/iv_poster"
-                        android:layout_toRightOf="@id/iv_poster">
+                        android:layout_toEndOf="@id/iv_poster">
 
                         <TextView
                             android:id="@+id/tv_title"
@@ -78,7 +77,6 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/rl_movie_description"
                 style="@style/CardStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
